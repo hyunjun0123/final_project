@@ -7,6 +7,8 @@ player_new_card_split
 dealer_current_score  
 current_coin  
 
+double_check : is 0 -> double  
+can_split : is 1 -> split
 
 Phase  
 Phase 0 : Betting Phase, Dealer Card Draw  
