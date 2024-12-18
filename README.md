@@ -23,3 +23,13 @@ Phase 15 : Result Phase
 Plan  
 Wave form Check : DW  
 segment_display.v : HJ  
+
+
+
+-tb
+--top
+---card_gen
+
+-tb_fpga
+--segment_display
+---top_display
