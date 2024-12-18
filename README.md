@@ -6,3 +6,14 @@ player_current_score_split
 player_new_card_split  
 dealer_current_score  
 current_coin  
+
+
+Phase  
+Phase 0 : Betting Phase, Dealer Card Draw  
+Phase 1 : Player Card Draw  
+Phase 2 : Hit, Stand  
+Phase 4 : Split  
+Phase 6 : Split first card  
+Phase 8 : Split second card  
+Phase 11 : Dealer Second Turn  
+Phase 15 : Result Phase  
