@@ -23,7 +23,9 @@ module segment_display(
     output LED_split,
     output LED_Win,
     output LED_Lose,
-    output LED_Draw
+    output LED_Draw,
+    output display12,
+    output display34
     );
     
     integer onesDigit = 0;
@@ -44,6 +46,7 @@ module segment_display(
     wire [5:0] display12;      // display
     wire [5:0] display34;
     wire can_split;
+    
     wire win;
     wire lose;
     wire draw;
@@ -99,9 +102,9 @@ module segment_display(
         if (win==1) LED_Win_Var = 1;
         else LED_Win_Var = 0;
         if (lose==1) LED_Lose_Var = 1;
-        else LED_Lose_Var = 1;
+        else LED_Lose_Var = 0;
         if (draw==1) LED_Draw_Var = 1;        
-        else LED_Draw_Var = 1;                                
+        else LED_Draw_Var = 0;                                
     end
 
     // Declare the digits for display (TODO)
@@ -111,9 +114,11 @@ module segment_display(
             twosDigit = DN;
             threesDigit = DN;
             foursDigit = DN;
-            total_bet = bet_8*8 + bet_4*4 + bet_2*2 + bet_1*1;
+            refresh_counter = 0;
+            LED_activating_counter = 0;
+    
         end
-        else if (next) begin
+        else  begin
              case(display12)
                 6'd62: begin
                     threesDigit = DN;
@@ -144,20 +149,20 @@ module segment_display(
     ///////////////////////////////////////////////////////////////////////////////////////////
     // You don't have to change it down here
     ///////////////////////////////////////////////////////////////////////////////////////////
-    
+    integer mod =1000;
     // Activate one of four 7-seg displays 
     always @(posedge(clk))
     begin 
         refresh_counter = refresh_counter + 1;      //increment counter
-        if(refresh_counter == 5000)                 //at 500
+        if(refresh_counter == 5000/mod)                 //at 500
             LED_activating_counter = 0;             //light onesDigit
-        if(refresh_counter == 10000)                //at 1,000
+        if(refresh_counter == 10000/mod)                //at 1,000
             LED_activating_counter = 1;             //light twosDigit
-        if(refresh_counter == 15000)                //at 1,500
+        if(refresh_counter == 15000/mod)                //at 1,500
             LED_activating_counter = 2;             //light threesDigit
-        if(refresh_counter == 20000)                //at 20,000
+        if(refresh_counter == 20000/mod)                //at 20,000
             LED_activating_counter = 3;             //light foursDigit
-        if(refresh_counter == 25000)                //at 25,000
+        if(refresh_counter == 25000/mod)                //at 25,000
             refresh_counter = 0;                    //start over at 0
     end
 

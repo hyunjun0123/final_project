@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module tb_fpga;
+    module tb_fpga;
 
     ////////////////////////////////////////////////////////////////////////
     // This testbench works like an FPGA.
@@ -28,7 +28,8 @@ module tb_fpga;
     wire LED_Draw;
     wire [3:0] Anode_Activate;
     wire [6:0] LED_out;
-       
+    wire [5:0] display12;      // display
+    wire [5:0] display34;   
     
     segment_display uut (
         .clk (clk),
@@ -48,7 +49,9 @@ module tb_fpga;
         .LED_split (LED_split),
         .LED_Win (LED_Win),
         .LED_Lose (LED_Lose),
-        .LED_Draw (LED_Draw)
+        .LED_Draw (LED_Draw),
+        .display12 (display12),
+        .display34 (display34)
     );
     
     
@@ -57,9 +60,9 @@ module tb_fpga;
     // Create fake clock  
     always
     begin
-        clk = 1'b0;
+        clk = 0;
         #period;
-        clk = 1'b1;
+        clk = ~clk;
         #period;
     end
     
@@ -73,10 +76,10 @@ module tb_fpga;
         // reset
         #100;
         reset = 0;
+        test=3'b001;
         #100;
         
-        test=3'b001;
-        
+
         // Coin betting
         bet_8 = 0;
         bet_4 = 1;
@@ -86,7 +89,7 @@ module tb_fpga;
         bet_4 = 0;
         bet_2 = 0;
         bet_1 = 0;
-        
+        #100;
         // Press the "Next" button: one of the dealer's cards will be revealed.
         next = 1;
         #100;
