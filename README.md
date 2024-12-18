@@ -24,6 +24,6 @@ Plan
 Wave form Check : DW  
 segment_display.v : HJ  
 
-
+A : decimal 61 (?)  
 b : decimal 62  
 d : decimal 63  
