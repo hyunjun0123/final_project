@@ -13,15 +13,14 @@ module top_display (
     input bet_2,
     input bet_1,
     input [2:0] test,
-    output reg [5:0] diplay12,      // display
-    output reg [5:0] diplay34,           // display
+    output reg [5:0] display12,      // display
+    output reg [5:0] display34,           // display
     output reg can_split,
     output reg Win,
     output reg Lose,
     output reg Draw
 );
-    reg [5:0] player_current_score_split;
-    reg [5:0] player_new_card_split;
+
     reg [5:0] dealer_current_score;
     reg [4:0] current_coin;
     
@@ -97,10 +96,9 @@ module top_display (
             Lose2 = 0;
             Draw2 = 0;
                       
-            diplay12 = 0;   // display
-            diplay34 = 0;
-            player_current_score_split = 0;
-            player_new_card_split = 0;
+            display12 = 0;   // display
+            display34 = 0;
+
             
             dealer_current_score = 0;
             
@@ -118,8 +116,8 @@ module top_display (
         if (game_phases == 0) begin
             bet_coin = bet_8 * 8 + bet_4 * 4 + bet_2 * 2 + bet_1;
             
-            diplay12 = 0;   // "b" diplay
-            diplay34 = current_coin;
+            display12 = 0;   // "b" diplay
+            display34 = current_coin;
         end
     end
 
@@ -136,8 +134,8 @@ module top_display (
             
             dealer_current_score = dealer_card1 + dealer_card2 + 10 * (dealer_card1 == 1 || dealer_card2 == 1);
             
-            diplay12 = 0;   // "d" diplay
-            diplay34 = dealer_card2;
+            display12 = 0;   // "d" diplay
+            display34 = dealer_card2;
 
             game_phases = 1;
         end 
@@ -153,8 +151,8 @@ module top_display (
             sum = c1 + c2 + 10 * (c1 == 1 || c2 == 1);
             can_split = (c1 == c2);
             
-            diplay12 = c1; // display
-            diplay34 = c2;
+            display12 = c1; // display
+            display34 = c2;
             
             if(sum == 21) begin
                 game_phases = 12;
@@ -179,7 +177,7 @@ module top_display (
             c1 = card1_out;
             on = 0;
             
-            diplay12 = sum;  // display
+            display12 = sum;  // 
 
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
@@ -187,7 +185,7 @@ module top_display (
                 sum = sum + c1;
             end
             
-            diplay34 = c1;  // new card display
+            display34 = c1;  // new card display
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
@@ -205,8 +203,8 @@ module top_display (
             c1 = card1_out;
             on = 0;
             
-            diplay12 = sum;  // display
-            diplay34 = c1;  // new card display
+            display12 = sum;  // display
+            display34 = c1;  // new card display
 
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
@@ -231,8 +229,8 @@ module top_display (
             c3 = card1_out;
             on = 0;
             
-            diplay12 = sum2;  // display
-            diplay34 = c3;  // new card display
+            display12 = sum2;  // display
+            display34 = c3;  // new card display
 
             if (c3 == 1 && sum2 < 11) begin
                 sum2 = sum2 + c3 + 10;
@@ -280,14 +278,14 @@ module top_display (
             #10;
             c1 = card1_out;
             on = 0;
-            diplay12 = sum;  // display
+            display12 = sum;  // display
 
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
             end else begin
                 sum = sum + c1;
             end
-            diplay34 = c1;  // new card display
+            display34 = c1;  // new card display
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
@@ -306,14 +304,14 @@ module top_display (
             #10;
             c1 = card1_out;
             on = 0;
-            diplay12 = sum;  // display
+            display12 = sum;  // display
 
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
             end else begin
                 sum = sum + c1;
             end
-            diplay34 = c1;  // new card display
+            display34 = c1;  // new card display
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
@@ -332,14 +330,14 @@ module top_display (
             #10;
             c3 = card1_out;
             on = 0;
-            diplay12 = sum2;  // display
+            display12 = sum2;  // display
 
             if (c3 == 1 && sum2 < 11) begin
                 sum2 = sum2 + c3 + 10;
             end else begin
                 sum2 = sum2 + c3;
             end
-            diplay34 = c3;  // new card display
+            display34 = c3;  // new card display
 
             if (sum2 > 21) begin  // burst
                 Lose2 = 1;  
@@ -391,8 +389,8 @@ module top_display (
                 
                 game_phases = 15; // Always end 
                 
-                diplay12 = 0; // Dealer
-                diplay34 = dealer_current_score;
+                display12 = 0; // Dealer
+                display34 = dealer_current_score;
             end
         end 
     end
@@ -412,8 +410,8 @@ module top_display (
             on = 0;         // Deactivate
             sum = c1 + c2 + 10 * (c1 == 1 || c2 == 1);   // split 2 draw further
                         
-            diplay12 = c1; // display
-            diplay34 = c2;
+            display12 = c1; // display
+            display34 = c2;
             
             game_phases = 4;
         end  
@@ -428,8 +426,8 @@ module top_display (
             on = 0;         // Deactivate
             sum2 = c3 + c4 + 10 * (c3 == 1 || c4 == 1);   // split 2 
                         
-            diplay12 = c3; // display
-            diplay34 = c4;
+            display12 = c3; // display
+            display34 = c4;
             
             game_phases = 6;        
         end
@@ -455,8 +453,8 @@ module top_display (
             end
             
             
-            diplay12 = 0; // Diplay empty LED ON
-            diplay34 = 0;
+            display12 = 0; // Diplay empty LED ON
+            display34 = 0;
             
             game_phases = 14;
 

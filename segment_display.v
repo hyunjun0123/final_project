@@ -41,8 +41,13 @@ module segment_display(
     reg LED_Lose_Var;
     reg LED_Draw_Var;
     
-    reg [5:0] diplay12;      // display
-    reg [5:0] diplay34;
+    wire [5:0] display12;      // display
+    wire [5:0] display34;
+    wire can_split;
+    wire win;
+    wire lose;
+    wire draw;
+    
     
     integer total_bet;
     
@@ -56,9 +61,9 @@ module segment_display(
                D7 = 4'b0111, // "7" 
                D8 = 4'b1000, // "8"     
                D9 = 4'b1001, // "9" 
-               Db = 4'b1010, // "b"
-               Dd = 4'b1011, // "d"
-               DA = 4'b1100, // "A"
+               Db = 4'b1010, // "b" = 62
+               Dd = 4'b1011, // "d" = 63
+               DA = 4'b1100, // "A" = 61
                DN = 4'b1101; // None 
   
                
@@ -67,7 +72,7 @@ module segment_display(
     // top uut (
     // 
     // );
-    top_diplay uut1 (
+    top_display uut1 (
         .clk(clk),
         .reset(reset),
         .next(next),
@@ -82,15 +87,21 @@ module segment_display(
         .test(test),
         .display12(display12),
         .display34(display34),
-        .can_split(LED_split_Var),
-        .Win(LED_Win_Var),
-        .Lose(LED_Lose_Var),
-        .Draw(LED_Draw_Var) 
+        .can_split(can_split),
+        .Win(win),
+        .Lose(lose),
+        .Draw(draw) 
     );
     // Activate LEDs (TODO)
     always @(posedge(clk)) begin
-        if (split) LED_split_Var = 1;
+        if (can_split==1) LED_split_Var = 1;
         else LED_split_Var = 0;
+        if (win==1) LED_Win_Var = 1;
+        else LED_Win_Var = 0;
+        if (lose==1) LED_Lose_Var = 1;
+        else LED_Lose_Var = 1;
+        if (draw==1) LED_Draw_Var = 1;        
+        else LED_Draw_Var = 1;                                
     end
 
     // Declare the digits for display (TODO)
@@ -103,13 +114,31 @@ module segment_display(
             total_bet = bet_8*8 + bet_4*4 + bet_2*2 + bet_1*1;
         end
         else if (next) begin
-            onesDigit = diplay34%10;
-            twosDigit = diplay34/10;
-            threesDigit = diplay12%10;
-            foursDigit = diplay12/10;
+             case(display12)
+                6'd62: begin
+                    threesDigit = DN;
+                    foursDigit = Db;
+                end
+                6'd63: begin
+                    threesDigit = DN;
+                    foursDigit = Dd;
+                end
+                6'd61: begin
+                    threesDigit = DN;
+                    foursDigit = DA;
+                end
+                default: begin 
+                    threesDigit = display12 % 10;
+                    foursDigit = display12 / 10;
+                end
+            endcase
+            onesDigit = display34 % 10;
+            twosDigit = display34 / 10;
+
         end
     end    
     ///////////////////////////////////////////////////////////////////////////////////////////
+
     
     
     ///////////////////////////////////////////////////////////////////////////////////////////

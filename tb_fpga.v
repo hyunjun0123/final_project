@@ -69,11 +69,13 @@ module tb_fpga;
     // These are just some Examples.
     initial
     begin
-        // reset
         reset = 1;
+        // reset
         #100;
         reset = 0;
         #100;
+        
+        test=3'b001;
         
         // Coin betting
         bet_8 = 0;
