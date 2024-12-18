@@ -19,3 +19,7 @@ Phase 6 : Split first card
 Phase 8 : Split second card  
 Phase 11 : Dealer Second Turn  
 Phase 15 : Result Phase  
+
+Plan  
+Wave form Check : DW  
+segment_display.v : HJ  
