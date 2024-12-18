@@ -27,6 +27,9 @@ Phase2 : Ace display -> 61 : DW
 
 segment_display.v : HJ  
 
+이후 예외처리 : ex) dealer BlackJack  
+
+
 A : decimal 61 (?)  
 b : decimal 62  
 d : decimal 63  
