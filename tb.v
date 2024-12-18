@@ -27,7 +27,7 @@ module tb;
     wire [5:0] player_current_score, player_new_card;
     wire [5:0] player_current_score_split, player_new_card_split;
     wire [5:0] dealer_current_score;
-    wire [4:0] current_coin;
+    wire [5:0] current_coin;
     wire can_split;
     wire Win;
     wire Lose;
