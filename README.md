@@ -22,6 +22,9 @@ Phase 15 : Result Phase
 
 Plan  
 Wave form Check : DW  
+Phase2 : Ace display -> 61 : DW  
+-> current display 1
+
 segment_display.v : HJ  
 
 A : decimal 61 (?)  
