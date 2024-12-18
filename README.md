@@ -33,3 +33,9 @@ segment_display.v : HJ
 A : decimal 61 (?)  
 b : decimal 62  
 d : decimal 63  
+
+
+
+12/18  
+Implementation Problem    
+1) current_coin is 5-bit. Max coin is 31.
