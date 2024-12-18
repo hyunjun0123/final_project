@@ -23,3 +23,7 @@ Phase 15 : Result Phase
 Plan  
 Wave form Check : DW  
 segment_display.v : HJ  
+
+
+b : decimal 62  
+d : decimal 63  
