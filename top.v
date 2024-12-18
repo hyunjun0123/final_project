@@ -13,8 +13,8 @@ module top (
     input bet_2,
     input bet_1,
     input [2:0] test,
-    output reg [5:0] player_current_score,      // display
-    output reg [5:0] player_new_card,           // display
+    output reg [5:0] player_current_score,      // display_12
+    output reg [5:0] player_new_card,           // display_34
     output reg [5:0] player_current_score_split,
     output reg [5:0] player_new_card_split,
     output reg [5:0] dealer_current_score,
@@ -118,7 +118,7 @@ module top (
         if (game_phases == 0) begin
             bet_coin = bet_8 * 8 + bet_4 * 4 + bet_2 * 2 + bet_1;
             
-            player_current_score = 0;   // "b" diplay
+            player_current_score = 6'd62;   // "b" diplay
             player_new_card = current_coin;
         end
     end
@@ -136,8 +136,9 @@ module top (
             
             dealer_current_score = dealer_card1 + dealer_card2 + 10 * (dealer_card1 == 1 || dealer_card2 == 1);
             
-            player_current_score = 0;   // "d" diplay
-            player_new_card = dealer_card2;
+            player_current_score = 6'd63;   // "d" diplay
+            if (dealer_card2 == 1) player_new_card = 6'd61;
+            else player_new_card = dealer_card2;
 
             game_phases = 1;
         end 
@@ -152,12 +153,23 @@ module top (
             
             sum = c1 + c2 + 10 * (c1 == 1 || c2 == 1);
             can_split = (c1 == c2);
-            
-            player_current_score = c1; // display
-            player_new_card = c2;
+
+            if (c1 == 1 && c2 == 1) begin 
+                player_current_score = 6'd61;
+                player_new_card = c2;
+            end else if (c1 == 1 && c2 != 1) begin
+                player_current_score = 6'd61;
+                player_new_card = c2;
+            end else if (c1 != 1 && c2 == 1) begin
+                player_current_score = c1;
+                player_new_card = 6'd61;
+            end else begin
+                player_current_score = c1; // display
+                player_new_card = c2;
+            end
             
             if(sum == 21) begin
-                game_phases = 12;
+                game_phases = 12; // BlackJack
                 bet_coin = bet_coin * 2;
             end
             else game_phases = 2; // next
@@ -169,31 +181,33 @@ module top (
 // MAIN PHASE
 
 
-    // Hit 
+    // hit
     always @(posedge hit) begin
         if (game_phases == 2) begin
-            double_check = 1;
-            can_split = 0;
+            double_check = 1; 
+            can_split = 0; 
             on = 1;
             #10;
-            c1 = card1_out;
+            c1 = card1_out; // draw new card
             on = 0;
             
             player_current_score = sum;  // display
 
-            if (c1 == 1 && sum < 11) begin
-                sum = sum + c1 + 10;
+            if (c1 == 1 && sum < 11) begin // new card is ace
+                sum = sum + c1 + 10; 
             end else begin
                 sum = sum + c1;
             end
             
-            player_new_card = c1;  // new card display
+            if (sum <=11 && c1 == 1) begin
+                player_new_card = 6'd61;  // new card display
+            end else player_new_card = c1;
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
-                game_phases = 15;
+                game_phases = 15; // result phase
             end else begin
-                game_phases = 2;  // one more player turn
+                game_phases = 2;  // one more player turn (hit or stand)
             end
         end
         
@@ -206,8 +220,9 @@ module top (
             on = 0;
             
             player_current_score = sum;  // display
-            player_new_card = c1;  // new card display
-
+            if(sum <= 11 && c1 == 1) player_new_card = 6'd61;
+            else player_new_card = c1;
+            
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
             end else begin
@@ -232,7 +247,9 @@ module top (
             on = 0;
             
             player_current_score = sum2;  // display
-            player_new_card = c3;  // new card display
+            
+            if (sum2 <= 11 && c3 == 1) player_new_card = 6'd61;
+            else player_new_card = c3;  // new card display
 
             if (c3 == 1 && sum2 < 11) begin
                 sum2 = sum2 + c3 + 10;
@@ -243,7 +260,7 @@ module top (
 
             if (sum2 > 21) begin  // Split 2 burst
                 Lose2 = 1;  
-                game_phases = 15;    // Split 2 turn
+                game_phases = 15;    // result phase
             end else begin
                 game_phases = 6;  // Split 2 turn
             end
@@ -282,12 +299,15 @@ module top (
             on = 0;
             player_current_score = sum;  // display
 
+            if (sum <= 11 && c1 == 1) player_new_card = 6'd61;
+            else player_new_card = c1;  // new card display
+            
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
             end else begin
                 sum = sum + c1;
             end
-            player_new_card = c1;  // new card display
+            
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
@@ -307,13 +327,15 @@ module top (
             c1 = card1_out;
             on = 0;
             player_current_score = sum;  // display
+            
+            if (sum <= 11 && c1 == 1) player_new_card = 6'd61;
+            else player_new_card = c1;  // new card display
 
             if (c1 == 1 && sum < 11) begin
                 sum = sum + c1 + 10;
             end else begin
                 sum = sum + c1;
             end
-            player_new_card = c1;  // new card display
 
             if (sum > 21) begin  // burst
                 Lose = 1;  
@@ -334,12 +356,14 @@ module top (
             on = 0;
             player_current_score = sum2;  // display
 
+            if (sum2 <= 11 && c3 == 1) player_new_card = 6'd61;
+            else player_new_card = c3;  // new card display
+
             if (c3 == 1 && sum2 < 11) begin
                 sum2 = sum2 + c3 + 10;
             end else begin
                 sum2 = sum2 + c3;
             end
-            player_new_card = c3;  // new card display
 
             if (sum2 > 21) begin  // burst
                 Lose2 = 1;  
@@ -391,7 +415,7 @@ module top (
                 
                 game_phases = 15; // Always end 
                 
-                player_current_score = 0; // Dealer
+                player_current_score = 6'd63; // Dealer
                 player_new_card = dealer_current_score;
             end
         end 
@@ -412,8 +436,19 @@ module top (
             on = 0;         // Deactivate
             sum = c1 + c2 + 10 * (c1 == 1 || c2 == 1);   // split 2 draw further
                         
-            player_current_score = c1; // display
-            player_new_card = c2;
+            if (c1 == 1 && c2 == 1) begin 
+                player_current_score = 6'd61;
+                player_new_card = c2;
+            end else if (c1 == 1 && c2 != 1) begin
+                player_current_score = 6'd61;
+                player_new_card = c2;
+            end else if (c1 != 1 && c2 == 1) begin
+                player_current_score = c1;
+                player_new_card = 6'd61;
+            end else begin
+                player_current_score = c1; // display
+                player_new_card = c2;
+            end
             
             game_phases = 4;
         end  
@@ -427,9 +462,20 @@ module top (
             c4 = card1_out;
             on = 0;         // Deactivate
             sum2 = c3 + c4 + 10 * (c3 == 1 || c4 == 1);   // split 2 
-                        
-            player_current_score = c3; // display
-            player_new_card = c4;
+            
+            if (c3 == 1 && c4 == 1) begin 
+                player_current_score = 6'd61;
+                player_new_card = c4;
+            end else if (c3 == 1 && c4 != 1) begin
+                player_current_score = 6'd61;
+                player_new_card = c4;
+            end else if (c3 != 1 && c4 == 1) begin
+                player_current_score = c3;
+                player_new_card = 6'd61;
+            end else begin
+                player_current_score = c3; // display
+                player_new_card = c4;
+            end                        
             
             game_phases = 6;        
         end
@@ -443,7 +489,7 @@ module top (
         
         else if (game_phases == 15) begin
             if (Win) begin
-                current_coin = current_coin + bet_coin;
+                current_coin = current_coin - bet_coin;
             end else if (Lose) begin
                 current_coin = current_coin - bet_coin;
             end
