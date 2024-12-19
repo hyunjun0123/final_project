@@ -31,6 +31,9 @@ module card_generation(
     reg [47:0] rand1;
     reg [47:0] rand2;
     
+    reg [47:0] rand3; // for test
+    reg [47:0] rand4; // for test
+    
     localparam BASE = 3'b000,
                TEST_SIMPLE = 3'b001, 
                TEST_DOUBLE = 3'b010, 
@@ -58,16 +61,19 @@ module card_generation(
             */
             rand1 <= 48'b11100101_10011101_11110000_00110000_00111011_00101101;
             rand2 <= 48'b11110000_00110000_00111111_01101101_11100101_10011101;
+            
+            rand3 <= 48'b00010001_00010001_00010001_00010001_00010001_00110001; // for test
+            rand4 <= 48'b00110011_00110011_00110011_00110011_00110011_01011010; // for test
         end
         else begin
             case (test) 
                 BASE: 
                         begin
                             if (on) begin
-                                card1 <= rand1[3:0];
-                                card2 <= rand2[3:0];
-                                rand1 <= rand1 >> 1;
-                                rand2 <= rand2 >> 1;
+                                card1 <= rand3[3:0];
+                                card2 <= rand4[3:0];
+                                rand3 <= rand3 >> 1;
+                                rand4 <= rand4 >> 1;
                             end
                         end
                 TEST_SIMPLE: 
