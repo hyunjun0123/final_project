@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 10ns / 1ps
 
 module card_generation(
 /*
@@ -73,25 +73,27 @@ module card_generation(
                 TEST_SIMPLE: 
                         begin
                             case (counter_simple)
-                                4'b0000: if (on) begin card1 <= 4'd10; card2 <= 4'd8; counter_simple <= counter_simple + 4'd1; end
-                                4'b0001: if (on) begin card1 <= 4'd4; card2 <= 4'd0; counter_simple <= 4'd0; end
+                                4'b0000: if (on) begin 
+                                card1 <= 4'd10; card2 <= 4'd8; counter_simple <= counter_simple + 4'd1; end
+                                4'b0001: if (on) begin
+                                card1 <= 4'd4; card2 <= 4'd0; counter_simple <= 4'd0; end
                                 default: begin card1 <= 4'd0; card2 <= 4'd0; end
                             endcase
                         end
                 TEST_DOUBLE: 
                         begin
                             case (counter_double)
-                                4'b0000: if (on) begin card1 <= 4'd10; card2 <= 4'd8; counter_double <= counter_double + 4'd1; end
-                                4'b0001: if (on) begin card1 <= 4'd2; card2 <= 4'd0; counter_double <= 4'd0; end
-                                default: begin card1 <= 4'd0; card2 <= 4'd0; end
+                                4'b0000: if (on) begin  card1 <= 4'd10; card2 <= 4'd8; counter_double <= counter_double + 4'd1; end
+                                4'b0001: if (on) begin  card1 <= 4'd2; card2 <= 4'd0; counter_double <= 4'd0; end
+                                default: begin  card1 <= 4'd0; card2 <= 4'd0; end
                             endcase
                         end
                 TEST_BLACKJACK: 
                         begin
                             case (counter_blackjack)
-                                4'b0000: if (on) begin card1 <= 4'd10; card2 <= 4'd1; counter_blackjack <= counter_blackjack + 4'd1; end
-                                4'b0001: if (on) begin card1 <= 4'd0; card2 <= 4'd0; counter_blackjack <= 4'd0; end
-                                default: begin card1 <= 4'd0; card2 <= 4'd0; end
+                                4'b0000: if (on) begin  card1 <= 4'd10; card2 <= 4'd1; counter_blackjack <= counter_blackjack + 4'd1; end
+                                4'b0001: if (on) begin  card1 <= 4'd0; card2 <= 4'd0; counter_blackjack <= 4'd0; end
+                                default: begin #5; card1 <= 4'd0; card2 <= 4'd0; end
                             endcase
                         end
                 TEST_SPLIT: 
@@ -106,8 +108,8 @@ module card_generation(
                             endcase
                         end
                 default: begin
-                                card1 <= 0;
-                                card2 <= 0;
+                                card1 <= 4'd0;
+                                card2 <= 4'd0;
                           end
             endcase
         end
