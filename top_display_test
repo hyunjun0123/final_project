@@ -78,7 +78,7 @@ module top_display (
     reg [5:0] sum2;
     
  
-    always @(posedge clk or posedge reset or posedge next or posedge hit or posedge stand or posedge double or posedge split) begin
+    always @(posedge clk) begin
         if (reset) begin
             game_phases = 0;
             bet_coin = 0;
