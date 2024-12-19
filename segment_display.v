@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 10ns / 1ps
 
 // fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 // FPGA tutorial: seven-segment LED display controller on Basys  3 FPGA
@@ -15,17 +15,13 @@ module segment_display(
     input bet_8,
     input bet_4,   
     input bet_2,
-    input bet_1,
-    input [2:0] test,
-    // Outputs
+    input bet_1,    // Outputs
     output [3:0] Anode_Activate, // anode signals of the 7-segment LED display
     output [6:0] LED_out,// cathode patterns of the 7-segment LED display
     output LED_split,
     output LED_Win,
     output LED_Lose,
-    output LED_Draw,
-    output display12,
-    output display34
+    output LED_Draw
     );
     
     integer onesDigit = 0;
@@ -87,7 +83,7 @@ module segment_display(
         .bet_4(bet_4),
         .bet_2(bet_2),
         .bet_1(bet_1),
-        .test(test),
+//        .test(test),
         .display12(display12),
         .display34(display34),
         .can_split(can_split),
@@ -154,7 +150,7 @@ module segment_display(
     ///////////////////////////////////////////////////////////////////////////////////////////
     // You don't have to change it down here
     ///////////////////////////////////////////////////////////////////////////////////////////
-    integer mod =1000;
+    integer mod =1;
     // Activate one of four 7-seg displays 
     always @(posedge(clk))
     begin 

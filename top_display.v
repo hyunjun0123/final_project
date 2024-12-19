@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 10ns / 1ps
 
 module top_display (
     input clk,
@@ -12,7 +12,7 @@ module top_display (
     input bet_4, //
     input bet_2, //
     input bet_1, //
-    input [2:0] test,
+//    input [2:0] test,
     output reg [5:0] display12,
     output reg [5:0] display34,
     output reg can_split,
@@ -29,6 +29,7 @@ module top_display (
     wire [3:0] card1_out;
     wire [3:0] card2_out;
     reg on;
+    wire [2:0] test = 3'b000;
 
     // Instantiate the card_generation module
     card_generation card_gen (
